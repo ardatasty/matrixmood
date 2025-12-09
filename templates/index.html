@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrix: The Choice</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+    <div id="ambientLight"></div>
+
+    <section class="main-screen">
+        
+        <div class="dialogue-wrapper">
+            <div class="dialogue-box">
+                <p id="morpheusText"></p>
+                <span class="cursor">_</span>
+            </div>
+        </div>
+
+        <div class="character-area">
+            <img src="{{ url_for('static', filename='images/morpheus.png') }}" alt="Morpheus" class="morpheus-img">
+        </div>
+
+        <div class="interaction-area">
+            <div class="input-container">
+                <i class="fas fa-terminal terminal-icon"></i>
+                <input type="text" id="userInput" placeholder="Zihnindekileri buraya dök..." autocomplete="off">
+            </div>
+
+            <div class="pills-container">
+                
+                <div class="pill-wrapper red-wrapper" onclick="makeChoice('red')" onmouseenter="hoverEffect('red')" onmouseleave="resetEffect()">
+                    <div class="pill red-pill"></div>
+                    <span class="pill-label">GERÇEKLİK<br><small>Film Önerisi</small></span>
+                </div>
+
+                <div class="pill-wrapper green-wrapper" onclick="makeChoice('green')" onmouseenter="hoverEffect('green')" onmouseleave="resetEffect()">
+                    <div class="pill green-pill"></div>
+                    <span class="pill-label">SİMÜLASYON<br><small>Müzik Önerisi</small></span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="resultSection" class="result-section">
+        <div id="loading" class="hidden">
+            <div class="matrix-loader"></div>
+            <p>VERİ İNDİRİLİYOR...</p>
+        </div>
+        <div id="resultContent"></div>
+        
+        <button class="scroll-up-btn" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <i class="fas fa-arrow-up"></i> YENİ SEÇİM YAP
+        </button>
+    </section>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

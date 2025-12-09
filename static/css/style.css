@@ -1,0 +1,173 @@
+/* --- TEMEL AYARLAR --- */
+body {
+    margin: 0; padding: 0;
+    background-color: #050505;
+    color: #e0ffe0;
+    font-family: 'Rajdhani', sans-serif;
+    overflow-x: hidden;
+}
+
+#matrixCanvas, #ambientLight {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1;
+}
+#matrixCanvas { opacity: 0.15; }
+#ambientLight {
+    transition: background 0.6s ease-in-out;
+    background: radial-gradient(circle at center, transparent 0%, #000 90%);
+}
+
+/* --- BÖLÜM 1: ANA EKRAN --- */
+.main-screen {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding-bottom: 50px;
+}
+
+/* Konuşma Balonu */
+.dialogue-wrapper { width: 90%; max-width: 800px; margin-bottom: 20px; }
+.dialogue-box {
+    background: rgba(0, 20, 0, 0.7);
+    border: 1px solid rgba(0, 255, 0, 0.3);
+    padding: 20px; border-radius: 0 20px 0 20px;
+    text-align: center; box-shadow: 0 0 20px rgba(0,0,0,0.8);
+    backdrop-filter: blur(5px);
+}
+.dialogue-box p {
+    font-size: 1.4em; margin: 0; color: #fff;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+.cursor { animation: blink 1s infinite; color: #0f0; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* Morpheus */
+.character-area { height: 300px; display: flex; align-items: flex-end; }
+.morpheus-img {
+    height: 100%; width: auto;
+    filter: drop-shadow(0 10px 20px #000);
+    transition: filter 0.5s;
+}
+
+/* Giriş Alanı */
+.interaction-area { width: 90%; max-width: 600px; margin-top: -20px; z-index: 2; }
+.input-container {
+    display: flex; align-items: center;
+    background: rgba(0,0,0,0.8); border: 1px solid #333;
+    padding: 10px 20px; border-radius: 30px; transition: 0.3s;
+}
+.input-container:focus-within { border-color: #0f0; box-shadow: 0 0 15px rgba(0,255,0,0.2); }
+.terminal-icon { color: #0f0; margin-right: 10px; }
+#userInput {
+    background: transparent; border: none; color: #fff;
+    width: 100%; font-size: 1.2em; outline: none; font-family: inherit;
+}
+
+/* --- HAPLAR GERİ GELDİ (3D Efektli) --- */
+.pills-container {
+    display: flex; justify-content: space-between;
+    margin-top: 40px; padding: 0 20px;
+}
+
+.pill-wrapper {
+    cursor: pointer; text-align: center; opacity: 0.7;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s;
+    padding: 10px; border-radius: 15px;
+}
+.pill-wrapper:hover {
+    transform: scale(1.15) translateY(-5px);
+    opacity: 1;
+}
+
+/* HAP ŞEKLİ */
+.pill {
+    width: 70px; height: 32px; border-radius: 20px;
+    margin: 0 auto 10px auto; position: relative;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+}
+/* Hap Parlaması (Işık Yansıması) */
+.pill::after {
+    content: ''; position: absolute; top: 4px; left: 10px; 
+    width: 20px; height: 8px; 
+    background: rgba(255,255,255,0.5); border-radius: 10px;
+}
+
+.red-pill { 
+    background: linear-gradient(135deg, #ff4444, #990000); 
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.4);
+}
+.green-pill { 
+    background: linear-gradient(135deg, #44ff44, #009900); 
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.4);
+}
+
+.pill-label { 
+    font-size: 1.1em; font-weight: 700; letter-spacing: 1px; display: block;
+    color: #888; transition: color 0.3s;
+}
+.pill-label small { 
+    font-size: 0.7em; font-weight: 400; opacity: 0.8; 
+    display: block; margin-top: 3px;
+}
+
+.red-wrapper:hover .pill-label { color: #ff6666; text-shadow: 0 0 10px rgba(255,0,0,0.3); }
+.green-wrapper:hover .pill-label { color: #66ff66; text-shadow: 0 0 10px rgba(0,255,0,0.3); }
+
+
+/* --- BÖLÜM 2: SONUÇ EKRANI --- */
+.result-section {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.9); border-top: 1px solid #333;
+    padding: 40px 20px; opacity: 0.5; transition: opacity 1s;
+}
+.result-active { opacity: 1; }
+
+.hidden { display: none; }
+#loading { text-align: center; color: #0f0; font-size: 1.2em; letter-spacing: 3px; }
+.matrix-loader {
+    width: 50px; height: 50px; border: 3px solid #0f0;
+    border-radius: 50%; border-top-color: transparent;
+    margin: 0 auto 20px; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+/* Sonuç Kartı */
+.result-content-wrapper {
+    display: flex; flex-wrap: wrap;
+    background: rgba(20, 20, 20, 0.9); border: 1px solid #444;
+    border-radius: 20px; overflow: hidden;
+    max-width: 900px; width: 100%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    animation: slideUp 0.8s ease;
+}
+@keyframes slideUp { from {transform: translateY(50px); opacity:0;} to {transform: translateY(0); opacity:1;} }
+
+.poster-side { flex: 1; min-width: 300px; }
+.poster-side img { width: 100%; height: 100%; object-fit: cover; display: block;}
+
+.info-side {
+    flex: 1.5; padding: 40px;
+    display: flex; flex-direction: column; justify-content: center; text-align: left;
+}
+.mood-tag { 
+    color: #0f0; text-transform: uppercase; letter-spacing: 2px; 
+    font-size: 0.9em; margin-bottom: 10px; display: block;
+}
+.info-side h2 { font-size: 2.5em; margin: 0 0 20px 0; color: #fff; }
+.info-side p { color: #ccc; line-height: 1.6; font-size: 1.1em; margin-bottom: 30px; }
+
+.action-btn {
+    display: inline-block; padding: 12px 30px;
+    background: #fff; color: #000;
+    text-decoration: none; font-weight: bold; border-radius: 30px;
+    width: fit-content; transition: 0.3s;
+}
+.action-btn:hover { background: #0f0; box-shadow: 0 0 20px #0f0; }
+
+.scroll-up-btn {
+    margin-top: 50px; background: transparent; border: 1px solid #555;
+    color: #555; padding: 10px 20px; cursor: pointer; border-radius: 5px;
+    transition: 0.3s;
+}
+.scroll-up-btn:hover { color: #fff; border-color: #fff; }
